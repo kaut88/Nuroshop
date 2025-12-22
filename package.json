@@ -1,17 +1,34 @@
 {
-    "name": "price-comparison-backend",
+    "name": "neuroshop-backend",
     "version": "1.0.0",
+    "description": "AI-powered price comparison backend for NeuroShop platform",
     "type": "module",
+    "main": "server.js",
     "scripts": {
         "dev": "node --watch server.js",
-        "start": "node server.js"
+        "start": "node server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "keywords": [
+        "price-comparison",
+        "ai",
+        "ecommerce",
+        "api",
+        "nodejs"
+    ],
+    "author": "NeuroShop Team",
+    "license": "MIT",
     "dependencies": {
         "express": "^4.18.2",
         "cors": "^2.8.5",
+        "helmet": "^7.1.0",
+        "express-rate-limit": "^7.1.5",
         "dotenv": "^16.3.1",
         "axios": "^1.6.2",
         "cheerio": "^1.0.0-rc.12",
         "openai": "^4.20.1"
+    },
+    "engines": {
+        "node": ">=18.0.0"
     }
 }
