@@ -13,9 +13,7 @@ export async function searchProducts(req, res) {
     try {
         const { query } = req.body;
 
-        if (!query || query.trim().length === 0) {
-            return res.status(400).json({ error: 'Query is required' });
-        }
+    console.log(`🔍 Search request: "${query}"`);
 
         // Check cache first
         const cacheKey = `search:${query.toLowerCase().trim()}`;
@@ -69,10 +67,11 @@ export async function searchProducts(req, res) {
             product.title.length > 3
         );
 
-        // Step 4: Compare and sort (lowest price first)
+        // Step 5: Process and sort results
         const sortedResults = compareAndSort(allResults);
+        console.log(`📊 Total valid products: ${sortedResults.length}`);
 
-        // Add savings information
+        // Step 6: Add savings information
         if (sortedResults.length > 1) {
             const lowestPrice = sortedResults[0].price;
             sortedResults.forEach((product, index) => {
@@ -117,11 +116,50 @@ export async function searchProducts(req, res) {
         res.json(response);
 
     } catch (error) {
-        console.error('Search error:', error);
+        const processingTime = Date.now() - startTime;
+        console.error(`❌ Search failed after ${processingTime}ms:`, error);
+
+        // Return structured error response
         res.status(500).json({
             error: 'Failed to search products',
             message: error.message,
             responseTime: Date.now() - startTime
         });
     }
-}
+});
+
+// Get search statistics
+export const getSearchStats = asyncHandler(async (req, res) => {
+    const cacheStats = searchCache.getStats();
+
+    res.json({
+        success: true,
+        stats: {
+            totalPlatforms: 4,
+            supportedCategories: ['electronics', 'groceries', 'vegetables', 'food', 'general'],
+            features: [
+                'AI-powered query parsing',
+                'Multi-platform price comparison',
+                'Smart category detection',
+                'Price analysis and insights',
+                'Response caching for faster results'
+            ],
+            cache: {
+                size: cacheStats.size,
+                enabled: true
+            }
+        },
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Clear cache endpoint (for admin use)
+export const clearCache = asyncHandler(async (req, res) => {
+    searchCache.clear();
+
+    res.json({
+        success: true,
+        message: 'Cache cleared successfully',
+        timestamp: new Date().toISOString()
+    });
+});
