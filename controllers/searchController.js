@@ -9,7 +9,7 @@ import { cache } from '../utils/cache.js';
 
 export async function searchProducts(req, res) {
     const startTime = Date.now();
-    
+
     try {
         const { query } = req.body;
 
@@ -39,7 +39,7 @@ export async function searchProducts(req, res) {
         const withTimeout = (promise, name) => {
             return Promise.race([
                 promise,
-                new Promise((_, reject) => 
+                new Promise((_, reject) =>
                     setTimeout(() => reject(new Error(`${name} timeout`)), TIMEOUT)
                 )
             ]).catch(error => {
@@ -62,10 +62,10 @@ export async function searchProducts(req, res) {
         const results = await Promise.all(platformPromises);
 
         // Step 3: Combine and filter results
-        const allResults = results.flat().filter(product => 
-            product && 
-            product.price > 0 && 
-            product.title && 
+        const allResults = results.flat().filter(product =>
+            product &&
+            product.price > 0 &&
+            product.title &&
             product.title.length > 3
         );
 

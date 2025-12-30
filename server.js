@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/api', searchRoutes);
+app.use('/api/v1', searchRoutes);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
